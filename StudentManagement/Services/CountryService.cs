@@ -36,14 +36,21 @@ namespace CountryManagement.Services
 
         public List<Country> Get(string CountryName, string id)
         {
-            /*List<Country> countries = new List<Country>();
-            var queryExpr = new BsonRegularExpression(new Regex(CountryName, RegexOptions.None));
+            List<Country> countries = new List<Country>();
+            /*var queryExpr = new BsonRegularExpression(new Regex(CountryName, RegexOptions.None));
             var builder = Builders<Country>.Filter;
             var filter1= builder.Regex("countryName",queryExpr);
             var matchedDoc = _countries.Find(filter1).ToList();*/
-
-            var filter = Builders<Country>.Filter.Regex("countryName", CountryName);
-            var result = _countries.Find(filter).ToList();
+            ///////////////////////SQL LIKE STATEMENT EQUIVALENT/////////////////
+            var filterLike = Builders<Country>.Filter.Regex("countryName", CountryName);
+            var resultLike = _countries.Find(filterLike).ToList();
+            ////////////////////////////////////////////////////////////////////
+            var filterNotEqual = Builders<Country>.Filter.Not(Builders<Country>.Filter.Eq(u => u.CountryName, "Turkey"));
+            var resultNE = _countries.Find(filterNotEqual).ToList();
+            ////////////////////////////////////////////////////////////////////
+            var filterEqual = Builders<Country>.Filter.Eq(u => u.Id, "62f377028422f553dc59e6ff");
+            var resultEq = _countries.Find(filterEqual).ToList();
+            ////////////////////////////////////////////////////////////////////
 
             /*var filter = Builders<Country>.Filter.Regex("countryName", new BsonRegularExpression(CountryName, "i"));
             //var filter = builder.Regex("countryName",CountryName);
@@ -52,16 +59,18 @@ namespace CountryManagement.Services
                 Debug.WriteLine("*********************************");
                 Debug.WriteLine(temp.CountryName+" - "+temp.CountryPlate);
             }*/
-            /*var filter2 = new BsonDocument { { "countryName", new BsonDocument { { "$regexFind", CountryName }, { "$options", "i" } } } };
-            var result = _countries.Find(filter2).ToList();
-            foreach (var temp in result)
+
+            /*
+            var filter2 = new BsonDocument { { "countryName", new BsonDocument { { "$regex", CountryName }, { "$options", "i" } } } };
+            var result4 = _countries.Find(filter2).ToList();
+            foreach (var temp in result4)
             {
                 Debug.WriteLine("//////////////////////////////////////////");
                 Debug.WriteLine(temp.CountryName + " - " + temp.CountryPlate);
             }*/
-
-            /*var filter3 = Builders<BsonDocument>.Filter.Eq("countryName", CountryName);
-            var query = _countries1.Find(filter3).ToList();
+            ///////////////////////EQ STATEMENT EQUIVALENT/////////////////
+            var filter3 = Builders<Country>.Filter.Eq("countryName", CountryName);
+            var query = _countries.Find(filter3).ToList();
             foreach (var results in query)
             {
                 Debug.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5%%%%%");
@@ -71,7 +80,7 @@ namespace CountryManagement.Services
             //var spec = new Document();
             //spec.Add("Name", new MongoRegex(".*" + CountryName + ".*", "i"));
             //countries = _countries.Find(country => country.CountryName == CountryName).ToList();*/
-            return result;
+            return resultEq;
         }
         public void Remove(string id)
         {
