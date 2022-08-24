@@ -5,4 +5,5 @@ değiştirildi güvenlik sebepleriyle. Bu sebeple connection string aslında bir
 
 
 
-!!! <user_name> ve <password> yazan yerler düzeltilmeli !!!
+!!! <user_name> ile <password> yazan yerler düzeltilmeli !!!
+  yani hem kullanıcı adı hem şifre güncellenmeli
